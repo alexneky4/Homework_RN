@@ -52,11 +52,12 @@ class Model:
         epochs_range = tqdm(range(epochs))
         for e in epochs_range:
             self.train_epoch(x, y)
-            acc = self.evaluate(x_test, y_test, 500)
-            epochs_range.set_postfix_str(f"Epoch: {e}; Accuracy = {acc:.4f}")
+            acc, loss = self.evaluate(x_test, y_test, 500)
+            epochs_range.set_postfix_str(f"Epoch: {e}; Accuracy = {acc:.4f}; Loss = {loss}")
 
-    def evaluate(self, x, y, batch_size) -> float:
+    def evaluate(self, x, y, batch_size):
         total_correct_predictions = 0
+        total_loss = 0.0
         total_len = x.shape[0]
 
         for i in range(0, total_len, batch_size):
@@ -69,5 +70,6 @@ class Model:
 
             correct_predictions = (predicted_max_value_indices == y_batch).sum().item()
             total_correct_predictions += correct_predictions
+            total_loss += torch.nn.functional.cross_entropy(predicted_distribution, y, reduction='sum').item()
 
-        return total_correct_predictions / total_len
+        return total_correct_predictions / total_len, total_loss / total_len

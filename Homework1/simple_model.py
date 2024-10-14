@@ -83,51 +83,41 @@ def train_epoch(data, labels, w, b, lr, batch_size):
 def train(data, labels, data_test, labels_test, batch_size=100, epochs=1000, device=get_default_device()):
     print(f"Using device {device}")
 
-    # Define layer sizes and initialize weights and biases
     layers_size = [784, 50, 50, 10]
     w = [xavier_initialization(layers_size[i], layers_size[i + 1], device=device) for i in range(len(layers_size) - 1)]
     b = [torch.randn(layers_size[i + 1], device=device) for i in range(len(layers_size) - 1)]
 
-    lr = 0.001  # Learning rate
-    eval_batch_size = 500  # Evaluation batch size
+    lr = 0.001
+    eval_batch_size = 500
 
-    # Create a progress bar for epochs
     epochs_range = tqdm(range(epochs))
 
-    # Training loop over epochs
-    for _ in epochs_range:
-        # Train for one epoch (batch by batch)
+    for e in epochs_range:
         w, b = train_epoch(data, labels, w, b, lr, batch_size)
-
-        # Evaluate after each epoch
-        accuracy = evaluate(data_test, labels_test, w, b, eval_batch_size)
-        epochs_range.set_postfix_str(f"accuracy = {accuracy:.4f}")
+        accuracy, loss  = evaluate(data_test, labels_test, w, b, eval_batch_size)
+        epochs_range.set_postfix_str(f"Epoch: {e}; Accuracy = {accuracy:.4f}; Loss = {loss}")
 
     return w, b
 
 
-def evaluate(data: torch.Tensor, labels: torch.Tensor, w: list[torch.Tensor], b: list[torch.Tensor],
-             batch_size: int) -> float:
+def evaluate(data, labels, w, b, batch_size):
     total_correct_predictions = 0
     total_len = data.shape[0]
+    total_loss = 0.0
     non_blocking = w[0].device.type == 'cuda'
 
     for i in range(0, total_len, batch_size):
         x = data[i: i + batch_size].to(w[0].device, non_blocking=non_blocking)
         y = labels[i: i + batch_size].to(w[0].device, non_blocking=non_blocking)
 
-        # Get the final layer output directly
         predicted_distribution = feed_forward(x, w, b)[-1]
 
-        # Get the predicted class indices
         _, predicted_max_value_indices = torch.max(predicted_distribution, dim=1)
-
-        # Calculate correct predictions
         correct_predictions = (predicted_max_value_indices == y).sum().item()
         total_correct_predictions += correct_predictions
+        total_loss += torch.nn.functional.cross_entropy(predicted_distribution, y, reduction='sum').item()
 
-    # Return accuracy as the ratio of correct predictions to total samples
-    return total_correct_predictions / total_len
+    return total_correct_predictions / total_len, total_loss / total_len
 
 # device = get_default_device()
 # train_data, train_labels, test_data, test_labels = load_mnist(device=device)
