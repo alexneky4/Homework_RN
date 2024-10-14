@@ -70,6 +70,6 @@ class Model:
 
             correct_predictions = (predicted_max_value_indices == y_batch).sum().item()
             total_correct_predictions += correct_predictions
-            total_loss += torch.nn.functional.cross_entropy(predicted_distribution, y, reduction='sum').item()
+            total_loss += torch.nn.functional.cross_entropy(predicted_distribution, y_batch, reduction='sum').item()
 
         return total_correct_predictions / total_len, total_loss / total_len
