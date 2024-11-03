@@ -1,0 +1,56 @@
+{
+  "device": "cuda",
+  "dataset": "CIFAR100",
+  "model": {
+    "model_defined": true,
+    "model_name": "resnet18_cifar100"
+  },
+  "batch_size": {
+    "train": 100,
+    "test": 200
+  },
+  "shuffle": {
+    "train": true,
+    "test": true
+  },
+  "epochs": 150,
+  "transform": {
+    "random_crop": {"size": 32, "padding": 4},
+    "random_vertical_flip": {},
+    "random_rotation": {
+      "degrees": 15
+    },
+    "gaussian_blur": {
+      "kernel_size": 3,
+      "sigma": [0.1, 2.0]
+    },
+    "random_erase": {
+      "p": 0.5,
+      "scale": [0.02, 0.33]
+    }
+  },
+  "optimizer": {
+    "type": "SGD",
+    "params": {
+      "lr": 0.1,
+      "momentum": 0.9,
+      "weight_decay": 5e-4
+    }
+  },
+  "scheduler": {
+    "type": "CosineAnnealingLR",
+    "params": {
+      "T_max": 150
+    }
+  },
+  "loss": "CrossEntropyLoss",
+  "logging": {
+    "log_dir": "./config2"
+  },
+  "early_stopping": {
+    "criterion": "loss",
+    "patience": 80,
+    "verbose": true
+  },
+  "use_amp": false
+}

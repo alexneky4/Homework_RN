@@ -1,0 +1,1 @@
+In order to create a new configuration, a new JSON file should be created. experiment_runner.py is the script that does the parameter sweep. It uses all the configuration files declared in experiment_configs.json. In experiment_results.txt are saved the best training and testing accuracies for the experiments.

@@ -1,0 +1,25 @@
+
+Training Results:
+Best Training Accuracy: 100.0000
+Best Validation Accuracy: 62.3000
+Training Results:
+Best Training Accuracy: 100.0000
+Best Validation Accuracy: 41.6900
+Training Results:
+Best Training Accuracy: 100.0000
+Best Validation Accuracy: 54.4900
+Training Results:
+Best Training Accuracy: 100.0000
+Best Validation Accuracy: 38.3600
+Training Results:
+Best Training Accuracy: 89.3380
+Best Validation Accuracy: 48.0300
+Training Results:
+Best Training Accuracy: 86.8620
+Best Validation Accuracy: 35.9900
+Training Results:
+Best Training Accuracy: 100.0000
+Best Validation Accuracy: 55.1200
+Training Results:
+Best Training Accuracy: 99.8560
+Best Validation Accuracy: 37.3400
